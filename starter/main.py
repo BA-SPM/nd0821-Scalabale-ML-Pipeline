@@ -68,17 +68,18 @@ except FileNotFoundError:
 @app.get("/", response_class=PlainTextResponse)
 def welcome_root() -> str:
     """
-    Return a simple usage help message for root.
+    GET \"/\" endpoint:\n
+    Welcome message for root endpoint with usage instructions.
     """
 
     return (
         "Welcome to the Census Income Prediction API\n"
         "===========================================\n\n"
-        "How to use:\n"
+        "How to use:\n\n"
         "1) GET \"/\"           -> show this help\n"
-        "2) POST \"/predict\"   -> run one inference\n"
+        "2) POST \"/predict\"   -> run one inference\n\n"
 
-        "Terminal example:\n"
+        "Example:\n"
         "curl \"http://127.0.0.1:8000/predict\" `\n"
         "  -H \"Content-Type: application/json\" `\n"
         "  -d '{\n"
@@ -97,12 +98,16 @@ def welcome_root() -> str:
         "    \"hours-per-week\": 40,\n"
         "    \"native-country\": \"United-States\"\n"
         "  }'\n\n"
+
+        "3) /docs for automatic API docs (Swagger UI and ReDoc)\n"
+        "4) /redoc for ReDoc API docs\n"
     )
 
 
 @app.post("/predict")
 def predict_salary(record: CensusRecord) -> dict[str, str]:
     """
+    POST \"/predict\" endpoint:\n
     Run model inference for one census record.
     """
 
