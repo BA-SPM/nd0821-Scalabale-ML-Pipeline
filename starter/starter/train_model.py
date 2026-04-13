@@ -18,7 +18,7 @@ if str(Path(__file__).resolve().parents[1]) not in sys.path:
     sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from starter.ml.data import process_data
-from starter.ml.model import train_model
+from starter.ml.model import compute_model_metrics, inference, train_model
 
 
 # ============================
@@ -29,6 +29,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 # via command-line arguments or config file.
 DATA_PATH = PROJECT_DIR / "data" / "census.csv"
 MODEL_DIR = PROJECT_DIR / "model"
+SLICE_OUTPUT_PATH = MODEL_DIR / "slice_output.csv"
 
 CATEGORICAL_FEATURES = [
     "workclass",
@@ -151,10 +152,60 @@ def load_artifacts(model_dir=MODEL_DIR):
     return model, encoder, label_binarizer
 
 
-def run_training_pipeline():
+def compute_slice_metrics(
+    model,
+    test_df,
+    encoder,
+    label_binarizer,
+    output_path=SLICE_OUTPUT_PATH,
+):
+    """
+    Compute model metrics for slices of categorical features and save them as CSV.
+    """
+
+    # Slice metric rows
+    rows = []
+
+    for feature in CATEGORICAL_FEATURES:
+        unique_values = sorted(test_df[feature].unique())
+
+        for value in unique_values:
+            slice_df = test_df[test_df[feature] == value]
+
+            X_slice, y_slice, _, _ = process_data(
+                slice_df,
+                categorical_features=CATEGORICAL_FEATURES,
+                label="salary",
+                training=False,
+                encoder=encoder,
+                lb=label_binarizer,
+            )
+
+            preds = inference(model, X_slice)
+            precision, recall, fbeta = compute_model_metrics(y_slice, preds)
+
+            rows.append(
+                {
+                    "feature": feature,
+                    "value": value,
+                    "precision": precision,
+                    "recall": recall,
+                    "fbeta": fbeta,
+                }
+            )
+
+    output_path.parent.mkdir(exist_ok=True)
+    slice_metrics_df = pd.DataFrame(rows)
+    slice_metrics_df.to_csv(output_path, index=False)
+
+    print(f"Saved slice metrics to {output_path}")
+
+
+def run_training_pipeline(output_slice_metrics=True):
     """
     Run full training pipeline and save all artifacts.
     """
+
     # Data loading
     data = load_clean_data()
 
@@ -172,6 +223,12 @@ def run_training_pipeline():
 
     # Artifact persistence
     save_artifacts(model, encoder, label_binarizer)
+
+    # Optional slice metrics
+    if output_slice_metrics:
+        print
+        compute_slice_metrics(model, test_df, encoder, label_binarizer)
+        print(f"Slice metrics computed and saved. {SLICE_OUTPUT_PATH}")
 
     print("Training complete. Artifacts saved to 'model/' directory.")
 
