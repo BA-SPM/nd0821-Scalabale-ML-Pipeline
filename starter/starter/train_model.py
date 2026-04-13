@@ -21,12 +21,12 @@ from starter.ml.data import process_data
 from starter.ml.model import train_model
 
 
-
 # ============================
 # Path setup and constants
 # ============================
 PROJECT_DIR = Path(__file__).resolve().parents[1]
-# TODO: Make data reading and model saving paths more flexible, e.g., via command-line arguments or config file.
+# TODO: Make data reading and model saving paths more flexible, e.g.,
+# via command-line arguments or config file.
 DATA_PATH = PROJECT_DIR / "data" / "census.csv"
 MODEL_DIR = PROJECT_DIR / "model"
 
@@ -42,12 +42,13 @@ CATEGORICAL_FEATURES = [
 ]
 
 
-
 # ============================
 # Functions
 # ============================
 def save_pickle_file(obj, file_path):
-    """Save one Python object as a pickle file."""
+    """
+    Save one Python object as a pickle file.
+    """
 
     # Binary artifact writing
     with open(file_path, "wb") as file:
@@ -57,19 +58,23 @@ def save_pickle_file(obj, file_path):
 
 
 def load_pickle_file(file_path):
-    """Load one Python object from a pickle file."""
+    """
+    Load one Python object from a pickle file.
+    """
 
     # Binary artifact reading
     with open(file_path, "rb") as file:
         obj = pickle.load(file)
 
     print(f"Loaded artifact from {file_path}")
-    
+
     return obj
 
 
 def load_clean_data(data_path=DATA_PATH):
-    """Load clean census data from CSV file."""
+    """
+    Load clean census data from CSV file.
+    """
 
     data = pd.read_csv(data_path)
     print(f"Loaded clean data from {data_path}")
@@ -84,7 +89,9 @@ def split_train_test(data):
 
 
 def process_training_data(train_df):
-    """Process training data and return features, labels, encoder, and label_binarizer."""
+    """
+    Process training data and return features, labels, encoder, and label_binarizer.
+    """
     # Training preprocessing
     return process_data(
         train_df,
@@ -95,7 +102,9 @@ def process_training_data(train_df):
 
 
 def process_test_data(test_df, encoder, label_binarizer):
-    """Process test data using fitted encoder and label binarizer."""
+    """
+    Process test data using fitted encoder and label binarizer.
+    """
     # Test preprocessing
     return process_data(
         test_df,
@@ -108,7 +117,9 @@ def process_test_data(test_df, encoder, label_binarizer):
 
 
 def save_artifacts(model, encoder, label_binarizer, model_dir=MODEL_DIR):
-    """Save model artifacts into model directory."""
+    """
+    Save model artifacts into model directory.
+    """
 
     # Ensure model directory exists
     model_dir.mkdir(exist_ok=True)
@@ -126,7 +137,9 @@ def save_artifacts(model, encoder, label_binarizer, model_dir=MODEL_DIR):
 
 
 def load_artifacts(model_dir=MODEL_DIR):
-    """Load model artifacts from model directory."""
+    """
+    Load model artifacts from model directory.
+    """
 
     # Artifact loading
     model = load_pickle_file(model_dir / "model.pkl")
@@ -138,9 +151,10 @@ def load_artifacts(model_dir=MODEL_DIR):
     return model, encoder, label_binarizer
 
 
-
 def run_training_pipeline():
-    """Run full training pipeline and save all artifacts."""
+    """
+    Run full training pipeline and save all artifacts.
+    """
     # Data loading
     data = load_clean_data()
 
@@ -163,10 +177,11 @@ def run_training_pipeline():
 
 
 def main():
-    """Script entry point for local training run."""
+    """
+    Script entry point for local training run.
+    """
     # Pipeline execution
     run_training_pipeline()
-
 
 
 # ============================

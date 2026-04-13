@@ -1,5 +1,6 @@
 """Unit tests for model training, inference, and metrics computation."""
 
+from starter.ml.model import train_model, inference, compute_model_metrics
 import sys
 from pathlib import Path
 
@@ -10,8 +11,6 @@ import pytest
 project_dir = Path(__file__).resolve().parents[1]
 if str(project_dir) not in sys.path:
     sys.path.append(str(project_dir))
-
-from starter.ml.model import train_model, inference, compute_model_metrics
 
 
 class TestTrainModel:

@@ -1,4 +1,3 @@
-
 """
 ML model training, inference, and metrics calculation.
 
@@ -7,7 +6,11 @@ make predictions, and compute performance metrics.
 
 // Renamed the import to name the functions more specific
 """
-from sklearn.metrics import fbeta_score as calculate_fbeta, precision_score as calculate_precision, recall_score as calculate_recall
+from sklearn.metrics import (
+    fbeta_score as calculate_fbeta,
+    precision_score as calculate_precision,
+    recall_score as calculate_recall,
+)
 from sklearn.ensemble import RandomForestClassifier
 
 
@@ -51,9 +54,9 @@ def compute_model_metrics(y, preds):
     recall : float
     fbeta : float
     """
-    fbeta_score       = calculate_fbeta(y, preds, beta=1, zero_division=1)
-    precision_score   = calculate_precision(y, preds, zero_division=1)
-    recall_score      = calculate_recall(y, preds, zero_division=1)
+    fbeta_score = calculate_fbeta(y, preds, beta=1, zero_division=1)
+    precision_score = calculate_precision(y, preds, zero_division=1)
+    recall_score = calculate_recall(y, preds, zero_division=1)
 
     return precision_score, recall_score, fbeta_score
 
