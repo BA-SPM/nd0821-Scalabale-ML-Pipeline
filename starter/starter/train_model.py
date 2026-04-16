@@ -29,7 +29,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 # via command-line arguments or config file.
 DATA_PATH = PROJECT_DIR / "data" / "census.csv"
 MODEL_DIR = PROJECT_DIR / "model"
-SLICE_OUTPUT_PATH = MODEL_DIR / "slice_output.csv"
+SLICE_OUTPUT_PATH = MODEL_DIR / "slice_output.txt"
 
 CATEGORICAL_FEATURES = [
     "workclass",

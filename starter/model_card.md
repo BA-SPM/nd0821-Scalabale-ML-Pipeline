@@ -65,7 +65,7 @@ Current model performance:
 
 Additional evaluation:
 - Slice-based metrics are generated for categorical features
-- Slice output file: model/slice_output.csv
+- Slice output file: model/slice_output.txt
 
 ## Ethical Considerations
 
